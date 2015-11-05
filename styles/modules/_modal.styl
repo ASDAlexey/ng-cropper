@@ -1,0 +1,71 @@
+.wrapper-modal
+  position: fixed;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, .75);
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .7s;
+  &.active
+    opacity: 1;
+    pointer-events: auto;
+
+.list-buttons
+  margin: 0
+  position: absolute
+  text-align: center
+  top: 100%
+  margin-top: 15px
+  left: 0
+  width: 100%
+  z-index: 1
+  li
+    display: inline-block;
+
+.list-buttons li:first-child {
+  margin-right: 30px;
+}
+
+@media (max-width: 768px) {
+  .list-buttons {
+    padding-left: 0;
+    bottom: -110px;
+  }
+
+  .list-buttons li {
+    display: block;
+  }
+
+  .list-buttons li:first-child {
+    margin-right: 0;
+  }
+}
+
+.image-crop-buttons {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: top;
+  outline: none;
+  font-size: 25px;
+  background-color: #35aa47;
+  width: 100px;
+  padding: 5px 10px;
+  border: none;
+  -webkit-transition: all .5s;
+  -moz-transition: all .5s;
+  -ms-transition: all .5s;
+  -o-transition: all .5s;
+  transition: all .5s;
+  color: #fff;
+}
+
+.image-crop-buttons:hover {
+  background-color: #2b8b3a;
+}
+
+.cancel-image {
+  background-color: #ccc;
+}

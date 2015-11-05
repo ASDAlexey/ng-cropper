@@ -1,0 +1,41 @@
+//- index.jade
+extends ../layout.jade
+block content
+    .container
+        .form-body
+            .form-group(ng-if='pictures.length')
+                label.col-md-3.control-label Pictures
+                ul.list-images.col-md-4
+                    li.col-sm-12.col-md-6.col-xs-12(ng-repeat='image in pictures')
+                        span(ng-if='!image.id')
+                            img(ng-src='{{image.src}}')
+                        span(ng-if='image.id')
+                            // <img ng-src="{{imagePath+image.src}}">
+                            img(ng-src='{{image.src}}')
+                        div
+                            a.delete-image.col-md-6.col-sm-6.col-xs-6(ng-click='delete(image)') delete
+                            .col-md-6.col-sm-6.col-xs-6
+                                input.radio-input(id='main-image{{$index}}' type='radio' name='main' ng-model='image.mainImage', value='true' ng-change='update(image,pictures)')
+                                label.radio-label(for='main-image{{$index}}')
+                                    span Main image
+            .form-group
+                label.col-md-3.control-label Picture
+                .col-md-4
+                    div.wrapper-file
+                        label(for="file")
+                            | add new file
+                            input#file(type='file' onchange='angular.element(this).scope().onFile(this.files[0])' file)
+                .wrapper-modal(modal ng-class="{'active':isModalOpen}")
+                    .img-container(ng-if='dataUrl')
+                        img(ng-if='dataUrl'
+                        ng-src='{{dataUrl}}'
+                        ng-cropper
+                        ng-cropper-show='showEvent'
+                        ng-cropper-hide='hideEvent'
+                        ng-cropper-options='options')
+                        ul.list-buttons
+                            li
+                                span.crop-image.image-crop-buttons(ng-click='cropImage()') Apply
+                            li
+                                span.cancel-image.image-crop-buttons(ng-click='closeModal()') Cancel
+

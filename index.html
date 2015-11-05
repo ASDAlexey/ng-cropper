@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!--html(style="opacity:0")-->
+<html ng-app="demo">
+  <head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="Description">
+    <meta name="keywords" content="Keywords">
+    <title>Cropper</title>
+    <link href="bower_components/cropper/dist/cropper.css" rel="stylesheet">
+    <link href="styles/application.css" rel="stylesheet">
+  </head>
+  <body ng-controller="UploadController">
+    <div class="wrapper">
+      <main class="main">
+        <div class="container">
+          <div class="form-body">
+            <div ng-if="pictures.length" class="form-group">
+              <label class="col-md-3 control-label">Pictures</label>
+              <ul class="list-images col-md-4">
+                <li ng-repeat="image in pictures" class="col-sm-12 col-md-6 col-xs-12"><span ng-if="!image.id"><img ng-src="{{image.src}}"></span><span ng-if="image.id">
+                    <!-- <img ng-src="{{imagePath+image.src}}">--><img ng-src="{{image.src}}"></span>
+                  <div><a ng-click="delete(image)" class="delete-image col-md-6 col-sm-6 col-xs-6">delete</a>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                      <input id="main-image{{$index}}" type="radio" name="main" ng-model="image.mainImage" value="true" ng-change="update(image,pictures)" class="radio-input">
+                      <label for="main-image{{$index}}" class="radio-label"><span>Main image</span></label>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="form-group">
+              <label class="col-md-3 control-label">Picture</label>
+              <div class="col-md-4">
+                <div class="wrapper-file">
+                  <label for="file">add new file
+                    <input id="file" type="file" onchange="angular.element(this).scope().onFile(this.files[0])" file>
+                  </label>
+                </div>
+              </div>
+              <div modal ng-class="{'active':isModalOpen}" class="wrapper-modal">
+                <div ng-if="dataUrl" class="img-container"><img ng-if="dataUrl" ng-src="{{dataUrl}}" ng-cropper ng-cropper-show="showEvent" ng-cropper-hide="hideEvent" ng-cropper-options="options">
+                  <ul class="list-buttons">
+                    <li><span ng-click="cropImage()" class="crop-image image-crop-buttons">Apply</span></li>
+                    <li><span ng-click="closeModal()" class="cancel-image image-crop-buttons">Cancel</span></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+<script src="bower_components/lodash/lodash.min.js" defer></script>
+<script src="bower_components/jquery/dist/jquery.min.js" defer></script>
+<script src="bower_components/angular/angular.min.js" defer></script>
+<script src="bower_components/cropper/dist/cropper.js" defer></script>
+<script src="bower_components/ng-cropper/ngCropper.js" defer></script>
+<script src="scripts/cropper.js" defer></script>
