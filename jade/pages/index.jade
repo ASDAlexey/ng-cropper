@@ -25,7 +25,7 @@ block content
                         label(for="file")
                             | add new file
                             input#file(type='file' onchange='angular.element(this).scope().onFile(this.files[0])' file)
-                .wrapper-modal(modal ng-class="{'active':isModalOpen}")
+                .wrapper-modal(modal="Modal.isOpen" ng-class="{'active':Modal.isOpen}")
                     .img-container(ng-if='dataUrl')
                         img(ng-if='dataUrl'
                         ng-src='{{dataUrl}}'

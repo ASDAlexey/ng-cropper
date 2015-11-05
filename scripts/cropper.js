@@ -1,6 +1,7 @@
 'use strict';
 var app = angular.module('demo', ['ngCropper']);
-app.controller('UploadController', function ($scope, $timeout, Cropper, $rootScope) {
+app.controller('UploadController', function ($scope, $timeout, Cropper, $rootScope, Modal) {
+    $scope.Modal = Modal;
     var file, data;
 
     /**
@@ -10,18 +11,18 @@ app.controller('UploadController', function ($scope, $timeout, Cropper, $rootSco
      * when input's event is fired.
      */
     $scope.onFile = function (blob) {
-        if(blob.type=='image/jpeg' || blob.type=='image/png' ) {
+        if (blob.type == 'image/jpeg' || blob.type == 'image/png') {
             Cropper.encode((file = blob)).then(function (dataUrl) {
                 $scope.dataUrl = dataUrl;
                 $timeout(showCropper);  // wait for $digest to set image's src
             });
-        }else{
+        } else {
             alert('Please provide correct file');
         }
     };
     $scope.$on('show', function (event, responce) {
         $timeout(function () {
-            $scope.isModalOpen = true;
+            Modal.isOpen = true;
         }, 0);
     });
 
@@ -101,7 +102,7 @@ app.controller('UploadController', function ($scope, $timeout, Cropper, $rootSco
         id: 1
     };
     //modal
-    $scope.isModalOpen = false;
+    Modal.isOpen = false;
     $scope.cropImage = function () {
         if (!file || !data) return;
         Cropper.crop(file, data).then(Cropper.encode).then(function (dataUrl) {
@@ -114,24 +115,26 @@ app.controller('UploadController', function ($scope, $timeout, Cropper, $rootSco
                 "toSave": true
             };
             $scope.pictures.push(oNewImageObj);
-            $scope.isModalOpen = false;
-            $timeout(function(){
+            Modal.isOpen = false;
+            $timeout(function () {
                 hideCropper();
-            },800);
+            }, 800);
             $rootScope.$broadcast('clear-file');
-            console.log($scope.pictures);
         });
     };
     $scope.closeModal = function () {
         $rootScope.$broadcast('clear-file');
-        $scope.isModalOpen = false;
-        $timeout(function(){
+        Modal.isOpen = false;
+        $timeout(function () {
             hideCropper();
-        },800);
+        }, 800);
     };
+    $scope.$on('closeModal', function (event, responce) {
+        $scope.closeModal();
+    });
     //delete image
-    $scope.delete=function(image){
-        $scope.pictures=_.without($scope.pictures,image);
+    $scope.delete = function (image) {
+        $scope.pictures = _.without($scope.pictures, image);
     }
 });
 app.directive('file', function () {
@@ -145,12 +148,32 @@ app.directive('file', function () {
         }
     }
 });
-app.directive('modal', function () {
+app.directive('modal', function (Modal, $document,$rootScope) {
     return {
         restrict: 'A',
-        scope: {},
+        scope: {
+            modal: "="
+        },
         link: function (scope, element, attrs) {
-
+            //close on press Esc
+            var closeEsc = function (e) {
+                if (e.keyCode === 27 && Modal.isOpen) {
+                    $rootScope.$broadcast('closeModal');
+                    scope.$apply();
+                }
+            };
+            scope.$watch('modal', function (newVal, oldVal) {
+                if (!angular.equals(oldVal, newVal)) {
+                    if (newVal) {
+                        $document.on("keyup", closeEsc);
+                    } else {
+                        $document.off("keyup", closeEsc);
+                    }
+                }
+            }, true);
         }
     }
 });
+app.service('Modal', [function () {
+    this.isOpen = false;
+}]);

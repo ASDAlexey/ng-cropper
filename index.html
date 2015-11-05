@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!--html(style="opacity:0")-->
 <html ng-app="demo">
   <head>
     <meta charset="utf-8">
@@ -8,6 +7,7 @@
     <meta name="keywords" content="Keywords">
     <title>Cropper</title>
     <link href="bower_components/cropper/dist/cropper.css" rel="stylesheet">
+    <link href="styles/states/bootstrap.min.css" rel="stylesheet">
     <link href="styles/application.css" rel="stylesheet">
   </head>
   <body ng-controller="UploadController">
@@ -38,7 +38,7 @@
                   </label>
                 </div>
               </div>
-              <div modal ng-class="{'active':isModalOpen}" class="wrapper-modal">
+              <div modal="Modal.isOpen" ng-class="{'active':Modal.isOpen}" class="wrapper-modal">
                 <div ng-if="dataUrl" class="img-container"><img ng-if="dataUrl" ng-src="{{dataUrl}}" ng-cropper ng-cropper-show="showEvent" ng-cropper-hide="hideEvent" ng-cropper-options="options">
                   <ul class="list-buttons">
                     <li><span ng-click="cropImage()" class="crop-image image-crop-buttons">Apply</span></li>
